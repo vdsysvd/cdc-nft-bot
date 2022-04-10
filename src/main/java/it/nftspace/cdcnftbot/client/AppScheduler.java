@@ -16,7 +16,12 @@ public class AppScheduler {
 
     @Scheduled(fixedDelay = 10000)
     public void run(){
-        restClientService.call();
+        restClientService.auction();
+    }
+
+    @Scheduled(fixedDelay = 10000)
+    public void buyNow(){
+        restClientService.getAssets();
     }
 
     @Scheduled(fixedDelay = 60*60 * 1000)

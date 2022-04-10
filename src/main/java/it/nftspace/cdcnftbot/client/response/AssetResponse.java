@@ -11,6 +11,7 @@ public class AssetResponse {
     private String id;
     private String name;
     private Listing defaultAuctionListing;
+    private Listing defaultListing;
 
     @Data
     public static class Listing {

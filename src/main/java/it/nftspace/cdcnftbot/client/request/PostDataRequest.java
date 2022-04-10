@@ -22,6 +22,7 @@ public class PostDataRequest {
         private int first;
         private int skip;
         private List<SortRequest> sort;
+        private WhereRequest where;
 
     }
 
