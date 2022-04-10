@@ -14,13 +14,17 @@ import java.util.TreeMap;
 @EnableScheduling
 @SpringBootApplication public class App {
 
-    public static final Map<String, String> ALPHA_BOT;
+    public static final Map<String, Map<String, String>> COLLECTIONS = new TreeMap<>();;
     static {
+        Map<String, String> alphaBots = null;
+        Map<String, String> ballies = null;
         try {
-            ALPHA_BOT = alphabotRanking();
+            alphaBots = alphabotRanking();
         } catch (IOException e) {
-            throw new IllegalStateException();
+            //ignore
         }
+        COLLECTIONS.put("4ff90f089ac3ef9ce342186adc48a30d", alphaBots);
+        COLLECTIONS.put("6c7b1a68479f2fc35e9f81e42bcb7397", ballies);
     }
     private static Map<String, String> alphabotRanking() throws IOException {
         Map<String, String> map = new TreeMap<>();
