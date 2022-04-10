@@ -18,6 +18,8 @@ import java.util.TreeMap;
     static {
         Map<String, String> alphaBots = null;
         Map<String, String> ballies = null;
+        Map<String, String> ll = null;
+        Map<String, String> psycoKitties = null;
         try {
             alphaBots = alphabotRanking();
         } catch (IOException e) {
@@ -25,6 +27,8 @@ import java.util.TreeMap;
         }
         COLLECTIONS.put("4ff90f089ac3ef9ce342186adc48a30d", alphaBots);
         COLLECTIONS.put("6c7b1a68479f2fc35e9f81e42bcb7397", ballies);
+        COLLECTIONS.put("82421cf8e15df0edcaa200af752a344f", ll);
+        COLLECTIONS.put("faa3d8da88f9ee2f25267e895db71471", psycoKitties);
     }
     private static Map<String, String> alphabotRanking() throws IOException {
         Map<String, String> map = new TreeMap<>();

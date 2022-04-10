@@ -45,7 +45,7 @@ import java.util.stream.Stream;
             .getMinSaleListingPriceDecimal();
     }
 
-    public void auction(String collectionId, long maxPrice, int hours, int spread) {
+    public void auction(String collectionId, int hours, int spread) {
         var floorPrice = getFloorPrice(collectionId);
         PostDataRequest postDataRequest = PostDataRequest.builder().operationName("GetAssets")
             .variables(PostDataRequest.Variables.builder().collectionId(collectionId)
@@ -58,7 +58,7 @@ import java.util.stream.Stream;
         var res = restTemplate.postForEntity(BASE_URL, request, DataResponse.class);
         StringBuilder print = new StringBuilder();
         res.getBody().getData().getPublicData().getAssets().stream()
-            .filter(f -> opportunitiesFilter(f, floorPrice, maxPrice, hours)).forEach(a -> {
+            .filter(f -> opportunitiesFilter(f, floorPrice, spread, hours)).forEach(a -> {
                 var info = info(a, collectionId);
                 if (!AppScheduler.CACHE.contains(info)) {
                     AppScheduler.CACHE.add(info);

@@ -16,19 +16,34 @@ public class AppScheduler {
     public static final Set<String> CACHE = new HashSet<>();
     private static final Map<String, String> COLLECTIONS =
         Map.of("ALPHABOT", "4ff90f089ac3ef9ce342186adc48a30d",
-            "BALLIES", "6c7b1a68479f2fc35e9f81e42bcb7397");
+            "BALLIES", "6c7b1a68479f2fc35e9f81e42bcb7397",
+            "LL", "82421cf8e15df0edcaa200af752a344f",
+            "PSYCHOKITTIES", "faa3d8da88f9ee2f25267e895db71471");
 
     @Scheduled(fixedDelay = 10000)
-    public void run(){
-        restClientService.auction(COLLECTIONS.get("ALPHABOT"), 420, 1, 10);
-        restClientService.auction(COLLECTIONS.get("BALLIES"), 250, 1, 10);
+    public void alphabot(){
+        restClientService.auction(COLLECTIONS.get("ALPHABOT"), 1, 50);
+        restClientService.buyNow(COLLECTIONS.get("ALPHABOT"), 420);
     }
 
     @Scheduled(fixedDelay = 10000)
-    public void buyNow(){
-        restClientService.buyNow(COLLECTIONS.get("ALPHABOT"), 420);
+    public void ballies(){
+        restClientService.auction(COLLECTIONS.get("BALLIES"), 1, 50);
         restClientService.buyNow(COLLECTIONS.get("BALLIES"), 250);
     }
+
+    @Scheduled(fixedDelay = 10000)
+    public void ll(){
+        restClientService.auction(COLLECTIONS.get("LL"), 1, 300);
+        restClientService.buyNow(COLLECTIONS.get("LL"), 3900);
+    }
+
+    @Scheduled(fixedDelay = 10000)
+    public void psychok(){
+        restClientService.auction(COLLECTIONS.get("PSYCHOKITTIES"), 1, 70);
+        restClientService.buyNow(COLLECTIONS.get("PSYCHOKITTIES"), 550);
+    }
+
 
     @Scheduled(fixedDelay = 60*60 * 1000)
     public void cache(){
