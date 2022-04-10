@@ -7,6 +7,7 @@ import it.nftspace.cdcnftbot.client.request.WhereRequest;
 import it.nftspace.cdcnftbot.client.response.AssetResponse;
 import it.nftspace.cdcnftbot.client.response.DataResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,9 +18,14 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Service @RequiredArgsConstructor public class RestClientService {
 
+    @Value("${telegram.token:}") private String telegramToken;
+    @Value("${telegram.chat_id:}") private String telegramChatId;
+
+    private static final String TELEGRAM_SEND_MESSAGE = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
     private static final Map<String, String> COLLECTIONS =
         Map.of("ALPHABOT", "4ff90f089ac3ef9ce342186adc48a30d");
     private static final int SPREAD = -100;
@@ -67,7 +73,8 @@ import java.util.Map;
             });
         String out = print.toString();
         if(!out.equals("")) {
-            System.out.println("ALPHABOT " + "Floor-Price " + floorPrice.intValue() + " Auction SPREAD selected " + SPREAD);
+            System.out.println("ALPHABOT auction " + "Floor-Price " + floorPrice.intValue() + " Auction SPREAD selected " + SPREAD);
+            Stream.of(out.split("\n")).forEach(i -> sendMessage(i.replace("#", "id-")));
             System.out.print(out);
         }
     }
@@ -97,9 +104,11 @@ import java.util.Map;
                 }
             });
             String out = print.toString();
+            //Stream.of(out.split("\n")).map(i -> i.split(" ")[3]).sorted(Comparator.comparingInt(Integer::parseInt)).collect(Collectors.toList());
             if(!out.equals("")) {
-                System.out.println("ALPHABOTS assets - buyNow floor-price" + floorPrice + " maxPrice" + MAX_PRICE);
+                System.out.println("ALPHABOTS assets - buyNow floor-price" + floorPrice + " maxPrice " + MAX_PRICE);
                 System.out.print(out);
+                Stream.of(out.split("\n")).forEach(i -> sendMessage(i.replace("#", "id-")));
             }
         }
     }
@@ -122,4 +131,7 @@ import java.util.Map;
         return name + " " + ranking + " " + bid + " " + date;
     }
 
+    public void sendMessage(String text) {
+        restTemplate.getForEntity(String.format(TELEGRAM_SEND_MESSAGE, telegramToken, telegramChatId, text), String.class);
+    }
 }
