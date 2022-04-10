@@ -19,7 +19,7 @@ public class AppScheduler {
         restClientService.call();
     }
 
-    @Scheduled(fixedDelay = 60*60)
+    @Scheduled(fixedDelay = 60*60 * 1000)
     public void cache(){
         CACHE.clear();
     }
