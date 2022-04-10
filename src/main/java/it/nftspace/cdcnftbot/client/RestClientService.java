@@ -22,16 +22,15 @@ import java.util.Map;
 
     private static final Map<String, String> COLLECTIONS =
         Map.of("ALPHABOT", "4ff90f089ac3ef9ce342186adc48a30d");
-    private static final String QUERY =
-        "fragment UserData on User {\n  uuid\n  id\n  username\n  displayName\n  isCreator\n  avatar {\n    url\n    __typename\n  }\n  isCreationWithdrawalBlocked\n  creationWithdrawalBlockExpiredAt\n  verified\n  __typename\n}\n\nquery GetAssets($audience: Audience, $brandId: ID, $categories: [ID!], $collectionId: ID, $creatorId: ID, $ownerId: ID, $first: Int!, $skip: Int!, $cacheId: ID, $hasSecondaryListing: Boolean, $where: AssetsSearch, $sort: [SingleFieldSort!], $isCurated: Boolean, $createdPublicView: Boolean) {\n  public(cacheId: $cacheId) {\n    assets(\n      audience: $audience\n      brandId: $brandId\n      categories: $categories\n      collectionId: $collectionId\n      creatorId: $creatorId\n      ownerId: $ownerId\n      first: $first\n      skip: $skip\n      hasSecondaryListing: $hasSecondaryListing\n      where: $where\n      sort: $sort\n      isCurated: $isCurated\n      createdPublicView: $createdPublicView\n    ) {\n      id\n      name\n      copies\n      copiesInCirculation\n      creator {\n        ...UserData\n        __typename\n      }\n      main {\n        url\n        __typename\n      }\n      cover {\n        url\n        __typename\n      }\n      royaltiesRateDecimal\n      primaryListingsCount\n      secondaryListingsCount\n      primarySalesCount\n      totalSalesDecimal\n      defaultListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultAuctionListing {\n        editionId\n        priceDecimal\n        auctionMinPriceDecimal\n        auctionCloseAt\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSaleListing {\n        editionId\n        priceDecimal\n        mode\n        __typename\n      }\n      defaultPrimaryListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        primary\n        __typename\n      }\n      defaultSecondaryListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSecondaryAuctionListing {\n        editionId\n        priceDecimal\n        auctionMinPriceDecimal\n        auctionCloseAt\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSecondarySaleListing {\n        editionId\n        priceDecimal\n        mode\n        __typename\n      }\n      likes\n      views\n      isCurated\n      defaultEditionId\n      isLiked\n      isAcceptingOffers\n      externalNftMetadata {\n        creatorAddress\n        creator {\n          name\n          avatar {\n            url\n            __typename\n          }\n          __typename\n        }\n        network\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n";
     private static final int SPREAD = -100;
     private static final int HOURS = 2;
+    public static final int MAX_PRICE = 420;
     private final RestTemplate restTemplate;
     private static final String BASE_URL = "https://crypto.com/nft-api/graphql";
     public static final String GET_COLLECTION_QUERY =
         "query GetCollection($collectionId: ID!) {\n  public {\n    collection(id: $collectionId) {\n      id\n      name\n      description\n      categories\n      banner {\n        url\n        __typename\n      }\n      logo {\n        url\n        __typename\n      }\n      creator {\n        displayName\n        __typename\n      }\n      aggregatedAttributes {\n        label: traitType\n        options: attributes {\n          value: id\n          label: value\n          total\n          __typename\n        }\n        __typename\n      }\n      metrics {\n        items\n        minAuctionListingPriceDecimal\n        minSaleListingPriceDecimal\n        owners\n        totalSalesDecimal\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n";
 
-    public static final String GET_ASSET = "fragment UserData on User {\n  uuid\n  id\n  username\n  displayName\n  isCreator\n  avatar {\n    url\n    __typename\n  }\n  isCreationWithdrawalBlocked\n  creationWithdrawalBlockExpiredAt\n  verified\n  __typename\n}\n\nquery GetAssets($audience: Audience, $brandId: ID, $categories: [ID!], $collectionId: ID, $creatorId: ID, $ownerId: ID, $first: Int!, $skip: Int!, $cacheId: ID, $hasSecondaryListing: Boolean, $where: AssetsSearch, $sort: [SingleFieldSort!], $isCurated: Boolean, $createdPublicView: Boolean) {\n  public(cacheId: $cacheId) {\n    assets(\n      audience: $audience\n      brandId: $brandId\n      categories: $categories\n      collectionId: $collectionId\n      creatorId: $creatorId\n      ownerId: $ownerId\n      first: $first\n      skip: $skip\n      hasSecondaryListing: $hasSecondaryListing\n      where: $where\n      sort: $sort\n      isCurated: $isCurated\n      createdPublicView: $createdPublicView\n    ) {\n      id\n      name\n      copies\n      copiesInCirculation\n      creator {\n        ...UserData\n        __typename\n      }\n      main {\n        url\n        __typename\n      }\n      cover {\n        url\n        __typename\n      }\n      royaltiesRateDecimal\n      primaryListingsCount\n      secondaryListingsCount\n      primarySalesCount\n      totalSalesDecimal\n      defaultListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultAuctionListing {\n        editionId\n        priceDecimal\n        auctionMinPriceDecimal\n        auctionCloseAt\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSaleListing {\n        editionId\n        priceDecimal\n        mode\n        __typename\n      }\n      defaultPrimaryListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        primary\n        __typename\n      }\n      defaultSecondaryListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSecondaryAuctionListing {\n        editionId\n        priceDecimal\n        auctionMinPriceDecimal\n        auctionCloseAt\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSecondarySaleListing {\n        editionId\n        priceDecimal\n        mode\n        __typename\n      }\n      likes\n      views\n      isCurated\n      defaultEditionId\n      isLiked\n      isAcceptingOffers\n      externalNftMetadata {\n        creatorAddress\n        creator {\n          name\n          avatar {\n            url\n            __typename\n          }\n          __typename\n        }\n        network\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n";
+    public static final String GET_ASSET_QUERY = "fragment UserData on User {\n  uuid\n  id\n  username\n  displayName\n  isCreator\n  avatar {\n    url\n    __typename\n  }\n  isCreationWithdrawalBlocked\n  creationWithdrawalBlockExpiredAt\n  verified\n  __typename\n}\n\nquery GetAssets($audience: Audience, $brandId: ID, $categories: [ID!], $collectionId: ID, $creatorId: ID, $ownerId: ID, $first: Int!, $skip: Int!, $cacheId: ID, $hasSecondaryListing: Boolean, $where: AssetsSearch, $sort: [SingleFieldSort!], $isCurated: Boolean, $createdPublicView: Boolean) {\n  public(cacheId: $cacheId) {\n    assets(\n      audience: $audience\n      brandId: $brandId\n      categories: $categories\n      collectionId: $collectionId\n      creatorId: $creatorId\n      ownerId: $ownerId\n      first: $first\n      skip: $skip\n      hasSecondaryListing: $hasSecondaryListing\n      where: $where\n      sort: $sort\n      isCurated: $isCurated\n      createdPublicView: $createdPublicView\n    ) {\n      id\n      name\n      copies\n      copiesInCirculation\n      creator {\n        ...UserData\n        __typename\n      }\n      main {\n        url\n        __typename\n      }\n      cover {\n        url\n        __typename\n      }\n      royaltiesRateDecimal\n      primaryListingsCount\n      secondaryListingsCount\n      primarySalesCount\n      totalSalesDecimal\n      defaultListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultAuctionListing {\n        editionId\n        priceDecimal\n        auctionMinPriceDecimal\n        auctionCloseAt\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSaleListing {\n        editionId\n        priceDecimal\n        mode\n        __typename\n      }\n      defaultPrimaryListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        primary\n        __typename\n      }\n      defaultSecondaryListing {\n        editionId\n        priceDecimal\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSecondaryAuctionListing {\n        editionId\n        priceDecimal\n        auctionMinPriceDecimal\n        auctionCloseAt\n        mode\n        auctionHasBids\n        __typename\n      }\n      defaultSecondarySaleListing {\n        editionId\n        priceDecimal\n        mode\n        __typename\n      }\n      likes\n      views\n      isCurated\n      defaultEditionId\n      isLiked\n      isAcceptingOffers\n      externalNftMetadata {\n        creatorAddress\n        creator {\n          name\n          avatar {\n            url\n            __typename\n          }\n          __typename\n        }\n        network\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n";
 
     private BigDecimal getFloorPrice() {
         PostDataRequest postDataRequest = PostDataRequest.builder().operationName("GetCollection")
@@ -47,12 +46,11 @@ import java.util.Map;
 
     public void auction() {
         var floorPrice = getFloorPrice();
-        //System.out.println("ALPHABOT " + "Floor-Price " + floorPrice.intValue() + " SPREAD selected " + SPREAD);
         PostDataRequest postDataRequest = PostDataRequest.builder().operationName("GetAssets")
             .variables(PostDataRequest.Variables.builder().collectionId(COLLECTIONS.get("ALPHABOT"))
                 .first(100).sort(Collections.singletonList(
                     SortRequest.builder().field("auctionCloseAt").order("ASC").build())).build())
-            .query(QUERY).build();
+            .query(GET_ASSET_QUERY).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<PostDataRequest> request = new HttpEntity<>(postDataRequest, headers);
@@ -63,26 +61,26 @@ import java.util.Map;
                 var info = info(a);
                 if (!AppScheduler.CACHE.contains(info)) {
                     AppScheduler.CACHE.add(info);
-                    print.append("Floor-price ").append(floorPrice).append(" ")
+                    print.append(floorPrice).append(" ")
                         .append(info).append("\n");
                 }
             });
         String out = print.toString();
         if(!out.equals("")) {
-            System.out.println("assets - auction");
+            System.out.println("ALPHABOT " + "Floor-Price " + floorPrice.intValue() + " Auction SPREAD selected " + SPREAD);
             System.out.print(out);
         }
     }
 
-    public void getAssets() {
+    public void buyNow() {
         var floorPrice = getFloorPrice();
         PostDataRequest postDataRequest = PostDataRequest.builder().operationName("GetAssets")
             .variables(PostDataRequest.Variables.builder().collectionId(COLLECTIONS.get("ALPHABOT"))
                 .first(100).where(WhereRequest.builder().buyNow(true)
-                    .maxPrice(BigDecimal.valueOf(420).toString()).build()).sort(
+                    .maxPrice(BigDecimal.valueOf(MAX_PRICE).toString()).build()).sort(
                     Collections.singletonList(
                         SortRequest.builder().field("listingTime").order("DESC").build())).build())
-            .query(GET_ASSET).build();
+            .query(GET_ASSET_QUERY).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<PostDataRequest> request = new HttpEntity<>(postDataRequest, headers);
@@ -95,13 +93,12 @@ import java.util.Map;
                 var info = "buyNow " + a.getName() + " "  + ranking + " " + a.getDefaultListing().getPriceDecimal();
                 if (!AppScheduler.CACHE.contains(info)) {
                     AppScheduler.CACHE.add(info);
-                    print.append(info).append(" Floor-price ").append(floorPrice)
-                        .append("\n");
+                    print.append(info).append("\n");
                 }
             });
             String out = print.toString();
             if(!out.equals("")) {
-                System.out.println("assets - buyNow");
+                System.out.println("ALPHABOTS assets - buyNow floor-price" + floorPrice + " maxPrice" + MAX_PRICE);
                 System.out.print(out);
             }
         }

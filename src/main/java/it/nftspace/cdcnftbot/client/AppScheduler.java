@@ -21,7 +21,7 @@ public class AppScheduler {
 
     @Scheduled(fixedDelay = 10000)
     public void buyNow(){
-        restClientService.getAssets();
+        restClientService.buyNow();
     }
 
     @Scheduled(fixedDelay = 60*60 * 1000)
