@@ -21,7 +21,7 @@ public class AppScheduler {
 
     @Scheduled(fixedDelay = 60*60)
     public void cache(){
-        restClientService.call();
+        CACHE.clear();
     }
 
 }
