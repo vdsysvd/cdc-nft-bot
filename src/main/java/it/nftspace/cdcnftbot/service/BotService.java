@@ -104,7 +104,7 @@ import java.util.stream.Stream;
     }
 
     @Async
-    public void topListed(CdcCollection cdcCollection, int maxPrice, int limit) {
+    public void topListed(CdcCollection cdcCollection, int maxPrice, int limit, boolean sortByPrice) {
 
         Map<String, Object[]> rankNumber = new TreeMap<>();
         DataResponse res =
@@ -121,9 +121,15 @@ import java.util.stream.Stream;
                 }
             });
         }
-        rankNumber.entrySet().stream().sorted(
-                Comparator.comparing(o -> ((BigDecimal) o.getValue()[1])))
-            .forEach(e -> restClientService.sendMessage("rank " + e.getKey() + " " + e.getValue()[0] + " $" + e.getValue()[1]));
+        restClientService.sendMessage("TopListed for " + cdcCollection.name() + " maxPrice " + maxPrice + " sortByPrice" + sortByPrice);
+        if(sortByPrice){
+            rankNumber.entrySet().stream().sorted(
+                    Comparator.comparing(o -> ((BigDecimal) o.getValue()[1])))
+                .forEach(e -> restClientService.sendMessage("rank " + e.getKey() + " " + e.getValue()[0] + " $" + e.getValue()[1]));
+        } else {
+            rankNumber.forEach( (k, v) -> restClientService.sendMessage("rank " + k + " " + v[0] + " $" + v[1]));
+        }
+
     }
 
 }

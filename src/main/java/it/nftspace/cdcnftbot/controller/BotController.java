@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
     @GetMapping("/collection/{cName}") public void bestRanking(@PathVariable CdcCollection cName,
         @RequestParam(required = false, defaultValue = "1000") int maxPrice,
-        @RequestParam(required = false, defaultValue = "10") int limit) {
-        botService.topListed(cName, maxPrice, limit);
+        @RequestParam(required = false, defaultValue = "10") int limit,
+        @RequestParam(required = false, defaultValue = "false") boolean orderByPrice) {
+        botService.topListed(cName, maxPrice, limit, orderByPrice);
     }
 
 }
