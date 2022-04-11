@@ -17,8 +17,8 @@ public class AppSchedulerConfig {
 
     @Scheduled(fixedDelay = 10000)
     public void alphabot(){
-        botService.auction(CdcCollection.ALPHA_BOT.toString(), 1, 50, 100);
-        botService.buyNow(CdcCollection.ALPHA_BOT.toString(), 420, 100);
+        botService.auction(CdcCollection.ALPHA_BOTS.toString(), 1, 50, 100);
+        botService.buyNow(CdcCollection.ALPHA_BOTS.toString(), 420, 100);
         botService.auction(CdcCollection.LL.toString(), 1, 300, 100);
         botService.buyNow(CdcCollection.LL.toString(), 3900, 100);
     }

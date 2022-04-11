@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -96,7 +97,6 @@ import java.util.stream.Stream;
     }
 
     private String getAssetId(String name){
-        System.out.println("getRanking for " + name);
         if(name.contains("Loaded")){
             return name.split(" ")[2];
         }
@@ -106,7 +106,7 @@ import java.util.stream.Stream;
     @Async
     public void topListed(CdcCollection cdcCollection, int maxPrice, int limit) {
 
-        Map<String, String> rankNumber = new TreeMap<>();
+        Map<String, Object[]> rankNumber = new TreeMap<>();
         DataResponse res =
             restClientService.getAssets(cdcCollection.toString(), maxPrice, limit, true, Collections.emptyList());
         var assets = res.getData().getPublicData().getAssets();
@@ -115,13 +115,15 @@ import java.util.stream.Stream;
                 var map = CdcInitCollections.COLLECTIONS.get(cdcCollection.toString());
                 String assetId = getAssetId(a.getName());
                 String ranking = map != null ? map.get(assetId) : null;
-                var price = a.getDefaultListing().getPriceDecimal().toString();
+                var price = a.getDefaultListing().getPriceDecimal();
                 if (ranking != null) {
-                    rankNumber.put(ranking, assetId.replace("#", "id-") + " $" + price);
+                    rankNumber.put(ranking, new Object[]{assetId.replace("#", "id-"), price});
                 }
             });
         }
-        rankNumber.forEach( (k, v) -> restClientService.sendMessage("rank " + k + " " + v));
+        rankNumber.entrySet().stream().sorted(
+                Comparator.comparing(o -> ((BigDecimal) o.getValue()[1])))
+            .forEach(e -> restClientService.sendMessage("rank " + e.getKey() + " " + e.getValue()[0] + " $" + e.getValue()[1]));
     }
 
 }
