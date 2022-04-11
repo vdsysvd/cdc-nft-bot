@@ -106,7 +106,7 @@ import java.util.stream.Stream;
     @Async
     public void topListed(CdcCollection cdcCollection, int maxPrice, int limit, boolean sortByPrice) {
 
-        Map<String, Object[]> rankNumber = new TreeMap<>();
+        Map<Integer, Object[]> rankNumber = new TreeMap<>();
         DataResponse res =
             restClientService.getAssets(cdcCollection.toString(), maxPrice, limit, true, Collections.emptyList());
         var assets = res.getData().getPublicData().getAssets();
@@ -117,11 +117,11 @@ import java.util.stream.Stream;
                 String ranking = map != null ? map.get(assetId) : null;
                 var price = a.getDefaultListing().getPriceDecimal();
                 if (ranking != null) {
-                    rankNumber.put(ranking, new Object[]{assetId.replace("#", "id-"), price});
+                    rankNumber.put(Integer.parseInt(ranking), new Object[]{assetId.replace("#", "id-"), price});
                 }
             });
         }
-        restClientService.sendMessage("TopListed for " + cdcCollection.name() + " maxPrice " + maxPrice + " sortByPrice" + sortByPrice);
+        restClientService.sendMessage("TopListed for " + cdcCollection.name() + " maxPrice " + maxPrice + " sortByPrice " + sortByPrice);
         if(sortByPrice){
             rankNumber.entrySet().stream().sorted(
                     Comparator.comparing(o -> ((BigDecimal) o.getValue()[1])))
