@@ -3,14 +3,19 @@ package it.nftspace.cdcnftbot.service;
 import it.nftspace.cdcnftbot.client.RestClientService;
 import it.nftspace.cdcnftbot.client.request.SortRequest;
 import it.nftspace.cdcnftbot.client.response.AssetResponse;
+import it.nftspace.cdcnftbot.client.response.DataResponse;
 import it.nftspace.cdcnftbot.config.AppSchedulerConfig;
+import it.nftspace.cdcnftbot.config.CdcCollection;
 import it.nftspace.cdcnftbot.config.CdcInitCollections;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 @Service @RequiredArgsConstructor public class BotService {
@@ -96,6 +101,27 @@ import java.util.stream.Stream;
             return name.split(" ")[2];
         }
         return name.split(" ")[1];
+    }
+
+    @Async
+    public void topListed(CdcCollection cdcCollection, int maxPrice, int limit) {
+
+        Map<String, String> rankNumber = new TreeMap<>();
+        DataResponse res =
+            restClientService.getAssets(cdcCollection.toString(), maxPrice, limit, true, Collections.emptyList());
+        var assets = res.getData().getPublicData().getAssets();
+        if (assets != null) {
+            assets.forEach(a -> {
+                var map = CdcInitCollections.COLLECTIONS.get(cdcCollection.toString());
+                String assetId = getAssetId(a.getName());
+                String ranking = map != null ? map.get(assetId) : null;
+                var price = a.getDefaultListing().getPriceDecimal().toString();
+                if (ranking != null) {
+                    rankNumber.put(ranking, assetId.replace("#", "id-") + " $" + price);
+                }
+            });
+        }
+        rankNumber.forEach( (k, v) -> restClientService.sendMessage("rank " + k + " " + v));
     }
 
 }
