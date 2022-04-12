@@ -5,6 +5,7 @@ import it.nftspace.cdcnftbot.client.request.SortRequest;
 import it.nftspace.cdcnftbot.client.request.WhereRequest;
 import it.nftspace.cdcnftbot.client.response.DataResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Slf4j
 @Service @RequiredArgsConstructor public class RestClientService {
 
     private static final String TELEGRAM_SEND_MESSAGE = "https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s";
@@ -54,6 +56,7 @@ import java.util.List;
     }
 
     public void sendMessage(String text) {
+        log.info(text);
         restTemplate.getForEntity(String.format(TELEGRAM_SEND_MESSAGE, telegramToken, telegramChatId, text), String.class);
     }
 }

@@ -21,17 +21,21 @@ public class CdcInitCollections {
         Map<String, String> alphaBots = null;
         Map<String, String> ballies = null;
         Map<String, String> ll = null;
-        Map<String, String> psycoKitties = null;
+        Map<String, String> psychoKitties = null;
+        Map<String, String> psychoMollies = null;
         try {
             alphaBots = alphabotRanking();
             ll = llRanking();
+            psychoKitties = ugonzoCollections("psychokitties.txt");
+            psychoMollies = ugonzoCollections("psychomollies.txt");
         } catch (IOException e) {
             //ignore
         }
         COLLECTIONS.put("4ff90f089ac3ef9ce342186adc48a30d", alphaBots);
         COLLECTIONS.put("6c7b1a68479f2fc35e9f81e42bcb7397", ballies);
         COLLECTIONS.put("82421cf8e15df0edcaa200af752a344f", ll);
-        COLLECTIONS.put("faa3d8da88f9ee2f25267e895db71471", psycoKitties);
+        COLLECTIONS.put("faa3d8da88f9ee2f25267e895db71471", psychoKitties);
+        COLLECTIONS.put("69d0601d6d4ecd0ea670835645d47b0d", psychoMollies);
     }
     private static Map<String, String> alphabotRanking() throws IOException {
         Map<String, String> map = new TreeMap<>();
@@ -50,6 +54,17 @@ public class CdcInitCollections {
         var lions = objectMapper.readValue(new ClassPathResource("loadedlion.json").getFile(), LLions.class);
         for(var l : lions.getLions()) {
             map.put("#" + l.getId(), String.valueOf(l.getRank()));
+        }
+        return map;
+    }
+    private static Map<String, String> ugonzoCollections(String fileName) throws IOException {
+        Map<String, String> map = new TreeMap<>();
+        var inputStream = new ClassPathResource(fileName).getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        while(reader.ready()) {
+            String line = reader.readLine();
+            String[] info = line.split("\t");
+            map.put("#" + info[1], info[0]);
         }
         return map;
     }

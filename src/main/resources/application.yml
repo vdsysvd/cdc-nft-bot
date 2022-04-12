@@ -6,3 +6,8 @@ telegram:
   chat_id:
 
 
+
+jobs:
+  bot:
+    run_schedule: '-' # every 10sec'*/10 * * * * *' # - to disable
+    cache_clear_schedule: '-' #every 24h '* * */24 * * *' # - to disable
