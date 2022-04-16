@@ -97,7 +97,7 @@ import java.util.stream.Stream;
     }
 
     private String getAssetId(String name){
-        if(name.contains("Loaded")){
+        if(name.contains("Loaded") || name.contains("Hare")){
             return name.split(" ")[2];
         }
         return name.split(" ")[1];
