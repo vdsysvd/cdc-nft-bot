@@ -29,7 +29,7 @@ public class CdcInitCollections {
             ll = llRanking();
             psychoKitties = getMapCollection("psychokitties.txt");
             psychoMollies = getMapCollection("psychomollies.txt");
-            psychoMollies = getMapCollection("madhares.txt");
+            madHares = getMapCollection("madhares.txt");
         } catch (IOException e) {
             //ignore
         }
