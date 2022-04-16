@@ -23,11 +23,13 @@ public class CdcInitCollections {
         Map<String, String> ll = null;
         Map<String, String> psychoKitties = null;
         Map<String, String> psychoMollies = null;
+        Map<String, String> madHares = null;
         try {
             alphaBots = alphabotRanking();
             ll = llRanking();
-            psychoKitties = ugonzoCollections("psychokitties.txt");
-            psychoMollies = ugonzoCollections("psychomollies.txt");
+            psychoKitties = getMapCollection("psychokitties.txt");
+            psychoMollies = getMapCollection("psychomollies.txt");
+            psychoMollies = getMapCollection("madhares.txt");
         } catch (IOException e) {
             //ignore
         }
@@ -36,6 +38,7 @@ public class CdcInitCollections {
         COLLECTIONS.put("82421cf8e15df0edcaa200af752a344f", ll);
         COLLECTIONS.put("faa3d8da88f9ee2f25267e895db71471", psychoKitties);
         COLLECTIONS.put("69d0601d6d4ecd0ea670835645d47b0d", psychoMollies);
+        COLLECTIONS.put("41a371f626f43473ca087f0f36f06299", madHares);
     }
     private static Map<String, String> alphabotRanking() throws IOException {
         Map<String, String> map = new TreeMap<>();
@@ -57,7 +60,7 @@ public class CdcInitCollections {
         }
         return map;
     }
-    private static Map<String, String> ugonzoCollections(String fileName) throws IOException {
+    private static Map<String, String> getMapCollection(String fileName) throws IOException {
         Map<String, String> map = new TreeMap<>();
         var inputStream = new ClassPathResource(fileName).getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
