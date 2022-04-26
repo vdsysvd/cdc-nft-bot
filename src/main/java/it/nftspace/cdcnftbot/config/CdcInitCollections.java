@@ -19,13 +19,15 @@ public class CdcInitCollections {
     public static final Map<String, Map<String, String>> COLLECTIONS = new TreeMap<>();
     static {
         Map<String, String> alphaBots = null;
+        Map<String, String> alphaBotsWeapons = null;
         Map<String, String> ballies = null;
         Map<String, String> ll = null;
         Map<String, String> psychoKitties = null;
         Map<String, String> psychoMollies = null;
         Map<String, String> madHares = null;
         try {
-            alphaBots = alphabotRanking();
+            alphaBots = alphabotRanking("alphabot.txt", 0);
+            alphaBotsWeapons = alphabotRanking("alphabotweapon.txt", 2);
             ll = llRanking();
             psychoKitties = getMapCollection("psychokitties.txt");
             psychoMollies = getMapCollection("psychomollies.txt");
@@ -33,18 +35,25 @@ public class CdcInitCollections {
         } catch (IOException e) {
             //ignore
         }
-        COLLECTIONS.put("4ff90f089ac3ef9ce342186adc48a30d", alphaBots);
-        COLLECTIONS.put("6c7b1a68479f2fc35e9f81e42bcb7397", ballies);
-        COLLECTIONS.put("82421cf8e15df0edcaa200af752a344f", ll);
-        COLLECTIONS.put("faa3d8da88f9ee2f25267e895db71471", psychoKitties);
-        COLLECTIONS.put("69d0601d6d4ecd0ea670835645d47b0d", psychoMollies);
-        COLLECTIONS.put("41a371f626f43473ca087f0f36f06299", madHares);
+        COLLECTIONS.put(CdcCollection.ALPHA_BOTS.toString(), alphaBots);
+        COLLECTIONS.put(CdcCollection.ALPHA_BOTS_WEAPONS.toString(), alphaBotsWeapons);
+        COLLECTIONS.put(CdcCollection.BALLIES.toString(), ballies);
+        COLLECTIONS.put(CdcCollection.LL.toString(), ll);
+        COLLECTIONS.put(CdcCollection.PSYCHO_KITTIES.toString(), psychoKitties);
+        COLLECTIONS.put(CdcCollection.PSYCHO_MOLLIES.toString(), psychoMollies);
+        COLLECTIONS.put(CdcCollection.MAD_HARES.toString(), madHares);
     }
-    private static Map<String, String> alphabotRanking() throws IOException {
+    private static Map<String, String> alphabotRanking(String fileName, int skipLineNo) throws IOException {
         Map<String, String> map = new TreeMap<>();
-        var inputStream = new ClassPathResource("alphabot.txt").getInputStream();
+        var inputStream = new ClassPathResource(fileName).getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        int skipped = 0;
         while(reader.ready()) {
+            if(skipped < skipLineNo){
+                skipped ++;
+                continue;
+            }
+            skipped = 0;
             String line = reader.readLine();
             String[] info = line.split("\t");
             map.put(info[0], info[3]);
