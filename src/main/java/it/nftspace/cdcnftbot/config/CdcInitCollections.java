@@ -64,7 +64,7 @@ public class CdcInitCollections {
             if(skipped >= 3){
                 skipped = 0;
                 String[] info = line.split("\t");
-                map.put(info[1], info[0]);
+                map.put(info[1], info[0].replace("#", ""));
             }
             skipped++;
         }
