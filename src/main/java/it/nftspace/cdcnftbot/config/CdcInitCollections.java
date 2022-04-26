@@ -26,8 +26,8 @@ public class CdcInitCollections {
         Map<String, String> psychoMollies = null;
         Map<String, String> madHares = null;
         try {
-            alphaBots = alphabotRanking("alphabot.txt", 0);
-            alphaBotsWeapons = alphabotRanking("alphabotweapon.txt", 2);
+            alphaBots = alphabotRanking();
+            alphaBotsWeapons = alphabotWeaponsRanking();
             ll = llRanking();
             psychoKitties = getMapCollection("psychokitties.txt");
             psychoMollies = getMapCollection("psychomollies.txt");
@@ -43,20 +43,30 @@ public class CdcInitCollections {
         COLLECTIONS.put(CdcCollection.PSYCHO_MOLLIES.toString(), psychoMollies);
         COLLECTIONS.put(CdcCollection.MAD_HARES.toString(), madHares);
     }
-    private static Map<String, String> alphabotRanking(String fileName, int skipLineNo) throws IOException {
+    private static Map<String, String> alphabotRanking() throws IOException {
         Map<String, String> map = new TreeMap<>();
-        var inputStream = new ClassPathResource(fileName).getInputStream();
+        var inputStream = new ClassPathResource("alphabot.txt").getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        int skipped = 0;
         while(reader.ready()) {
-            if(skipped < skipLineNo){
-                skipped ++;
-                continue;
-            }
-            skipped = 0;
             String line = reader.readLine();
             String[] info = line.split("\t");
             map.put(info[0], info[3]);
+        }
+        return map;
+    }
+    private static Map<String, String> alphabotWeaponsRanking() throws IOException {
+        Map<String, String> map = new TreeMap<>();
+        var inputStream = new ClassPathResource("alphabotweapon.txt").getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        int skipped = Integer.MAX_VALUE;
+        while(reader.ready()) {
+            String line = reader.readLine();
+            if(skipped >= 3){
+                skipped = 0;
+                String[] info = line.split("\t");
+                map.put(info[1], info[0]);
+            }
+            skipped++;
         }
         return map;
     }
